@@ -145,10 +145,16 @@ NSString *UI7BarButtonItemIconNames[] = {
 }
 
 - (id)_updateImageWithTintColor:(UIColor *)tintColor isSelected:(BOOL)selected getImageOffset:(UIOffset *)offset {
-    UIImage *image = [self.image imageByFilledWithColor:tintColor];
+    UIImage *image = self.image;
     if ([UIDevice currentDevice].iOS7) {
         return image;
     }
+    
+    if (selected)
+        image = [self.image imageByFilledWithColor:tintColor];
+    else
+        image = [self.image imageByFilledWithColor:[UIColor grayColor]];
+    
     if (image == nil) return nil;
 
     if (selected) {
