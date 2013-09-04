@@ -49,8 +49,8 @@ NSString *UI7TabBarStyle = @"UI7TabBarStyle";
 }
 
 - (void)_tintColorUpdated {
-    [super _tintColorUpdated];
-    self.selectedImageTintColor = self.superview.tintColor;
+    [super _tintColorUpdated];  //superview.tintColor
+    self.selectedImageTintColor = [UIColor colorWithRed:0.000 green:0.592 blue:0.992 alpha:1.000];
 }
 
 @end
