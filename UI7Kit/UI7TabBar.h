@@ -18,4 +18,15 @@
 
 @interface UI7TabBar : UITabBar<UI7Patch>
 
+
+@end
+
+
+@interface UI7KitWorkaroundTintSingleton : NSObject
+
+@property (nonatomic, retain) UIColor *workaroundTintColor;
+@property (nonatomic, assign) UIBarStyle workaroundBarStyle;
+
++ (UI7KitWorkaroundTintSingleton *)sharedObject;
+
 @end

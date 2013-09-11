@@ -50,8 +50,9 @@ NSString *UI7TabBarStyle = @"UI7TabBarStyle";
 
 - (void)_tintColorUpdated {
     [super _tintColorUpdated];  //superview.tintColor
-    self.selectedImageTintColor = [UIColor colorWithRed:0.000 green:0.592 blue:0.992 alpha:1.000];
+    self.selectedImageTintColor = [[UI7KitWorkaroundTintSingleton sharedObject] workaroundTintColor];
 }
+
 
 @end
 
@@ -66,13 +67,19 @@ NSString *UI7TabBarStyle = @"UI7TabBarStyle";
 }
 
 - (void)_tabBarInit {
-    self.tintColor = [UIColor grayColor];
+    self.tintColor = [[UI7KitWorkaroundTintSingleton sharedObject] workaroundTintColor];
     self.selectedImageTintColor = self.superview.tintColor;
 
     UIGraphicsBeginImageContext(CGSizeMake(1.0, 3.0));
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [(UIColor *)[UIColor colorWith8bitWhite:178 alpha:255] set];
-    CGContextFillRect(context, CGRectMake(.0, .0, 1.0, 1.0));
+    
+    if ([[UI7KitWorkaroundTintSingleton sharedObject] workaroundBarStyle] == UIBarStyleBlackOpaque) {
+        [[UI7Color blackTabBarColor] set];
+    } else {
+        [(UIColor *)self.backgroundColor set];
+    }
+    
+    CGContextFillRect(context, CGRectMake(.0, .0, 300.0, 300.0));
     UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     self.backgroundImage = backgroundImage; // Makes tab bar flat
@@ -142,3 +149,19 @@ NSString *UI7TabBarStyle = @"UI7TabBarStyle";
 
 @end
 
+@implementation UI7KitWorkaroundTintSingleton
+
++ (UI7KitWorkaroundTintSingleton *)sharedObject
+{
+    static UI7KitWorkaroundTintSingleton *sharedObject;
+    
+    @synchronized(self)
+    {
+        if (!sharedObject)
+            sharedObject = [[UI7KitWorkaroundTintSingleton alloc] init];
+        
+        return sharedObject;
+    }
+}
+
+@end
