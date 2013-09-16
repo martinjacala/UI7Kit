@@ -60,6 +60,7 @@ NSAPropertyGetter(titleLabel, @"_titleLabel");
     BOOL isPhone = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
     CGFloat leftMargin = isPhone ? 8.0f : .0f;
 
+    __block CGFloat lowestY = .0;
     [self.buttons applyProcedureWithIndex:^(id obj, NSUInteger index) {
         UIButton *button = obj; // UIAlertButton
         
@@ -72,6 +73,7 @@ NSAPropertyGetter(titleLabel, @"_titleLabel");
         } else {
             frame.origin.y = self.titleLabel.frame.size.height + 35.0f + index * UI7ControlRowHeight;
         }
+        lowestY = MAX(lowestY, frame.origin.y);
         button.frame = frame;
         
         if (self.cancelButtonIndex == (NSInteger)index) {
@@ -119,7 +121,8 @@ NSAPropertyGetter(titleLabel, @"_titleLabel");
     }];
 
     CGRect frame = self.frame;
-    frame.origin.y += self.buttons.count * 9.0f;
+    frame.size.height = lowestY + UI7ControlRowHeight + 6.0f;
+    frame.origin.y = self.superview.frame.size.height - frame.size.height;
 
     if (self.titleLabel.text.length > 0) {
         CGRect tframe = self.titleLabel.frame;
@@ -136,15 +139,18 @@ NSAPropertyGetter(titleLabel, @"_titleLabel");
 
     if (!isPhone) {
         UIView *ssuperview = self.superview.superview;
-        frame = ssuperview.frame;
-        frame.size.height += 45.0f;
-        ssuperview.frame = frame;
-        [ssuperview.subviews[0] setHidden:YES];
-        UIView *dimmingView = [[[UIView alloc] initWithFrame:self.window.bounds] autorelease];
-        dimmingView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.15];
-        dimmingView.hidden = YES;
-        [ssuperview.superview insertSubview:dimmingView belowSubview:ssuperview];
-        [dimmingView setHidden:NO animated:YES];
+        UIView *firstSubview = ssuperview.subviews[0];
+        if (self.superview != firstSubview) {
+            frame = ssuperview.frame;
+            frame.size.height += 45.0f;
+            ssuperview.frame = frame;
+            [firstSubview setHidden:YES];
+            UIView *dimmingView = [[[UIView alloc] initWithFrame:self.window.bounds] autorelease];
+            dimmingView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.15];
+            dimmingView.hidden = YES;
+            [ssuperview.superview insertSubview:dimmingView belowSubview:ssuperview];
+            [dimmingView setHidden:NO animated:YES];
+        }
     }
 }
 

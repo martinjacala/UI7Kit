@@ -14,8 +14,6 @@
 
 @interface UITableViewCell (Accessor)
 
-@property(nonatomic,assign) UITableView *tableView;
-@property(nonatomic,strong) NSIndexPath *indexPath;
 @property(nonatomic,assign,setter=___setAccessoryType:) UITableViewCellAccessoryType ___accessoryType;
 
 @end
@@ -24,22 +22,6 @@
 @implementation UITableViewCell (Accessor)
 
 //NSAPropertyGetter(tableView, @"_tableView");
-
-- (UITableView *)tableView {
-    return [self associatedObjectForKey:@"UI7TableViewCellTableView"];
-}
-
-- (void)setTableView:(UITableView *)tableView {
-    [self setAssociatedObject:tableView forKey:@"UI7TableViewCellTableView" policy:OBJC_ASSOCIATION_ASSIGN];
-}
-
-- (NSIndexPath *)indexPath {
-    return [self associatedObjectForKey:@"UI7TableViewCellIndexPath"];
-}
-
-- (void)setIndexPath:(NSIndexPath *)indexPath {
-    [self setAssociatedObject:indexPath forKey:@"UI7TableViewCellIndexPath" policy:OBJC_ASSOCIATION_RETAIN];
-}
 
 - (UITableViewCellAccessoryType)___accessoryType {
     NSNumber *type = [self associatedObjectForKey:@"UI7TableViewCellAccessoryType"];

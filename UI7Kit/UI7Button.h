@@ -17,4 +17,14 @@
 
 @interface UI7RoundedRectButton : UI7Button
 
+@property(copy,nonatomic) NSNumber *cornerRadius;
+
+@end
+
+
+@interface UI7BorderedRoundedRectButton : UI7Button
+
+@property(copy,nonatomic) NSNumber *cornerRadius;
+@property(copy,nonatomic) NSNumber *borderWidth;
+
 @end

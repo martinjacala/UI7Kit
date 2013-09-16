@@ -233,7 +233,7 @@ UIColor *UI7ButtonDefaultTitleColor = nil;
 @implementation UI7RoundedRectButton
 
 - (void)_roundedRectButtonInit {
-    self.layer.cornerRadius = 6.0;
+    self.layer.cornerRadius = self.cornerRadius ? self.cornerRadius.floatValue : 6.0f;
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 }
 
@@ -269,6 +269,53 @@ UIColor *UI7ButtonDefaultTitleColor = nil;
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     self.___backgroundColor = backgroundColor;
     [self _tintColorUpdated];
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+    [super setTintColor:tintColor];
+    [self _tintColorUpdated]; // for iOS6 SDK + iOS7
+}
+
+- (void)tintColorDidChange {
+    [super tintColorDidChange];
+    [self _tintColorUpdated]; // for iOS7
+}
+
+@end
+
+
+@implementation UI7BorderedRoundedRectButton
+
+- (void)_roundedRectButtonInit {
+    self.layer.cornerRadius = self.cornerRadius ? self.cornerRadius.floatValue : 6.0f;
+    self.layer.borderWidth = self.borderWidth ? self.borderWidth.floatValue : 1.0f;
+}
+
+- (void)_tintColorUpdated {
+    UIColor *tintColor = self.tintColor;
+    if (tintColor == nil) return;
+
+    UIColor *textTitleColor = self.___textTitleColor;
+    if (textTitleColor == nil) {
+        textTitleColor = tintColor;
+    }
+    [self __setTitleColor:textTitleColor forState:UIControlStateNormal];
+    UIColor *highlightedTextTitleColor = textTitleColor.highligtedColor;
+    [self __setTitleColor:highlightedTextTitleColor forState:UIControlStateHighlighted];
+    [self __setTitleColor:highlightedTextTitleColor forState:UIControlStateSelected];
+    self.layer.borderColor = textTitleColor.CGColor;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    [self _roundedRectButtonInit];
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    [self _roundedRectButtonInit];
+    return self;
 }
 
 - (void)setTintColor:(UIColor *)tintColor {

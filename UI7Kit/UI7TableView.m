@@ -16,8 +16,8 @@ CGFloat UI7TableViewGroupedTableSectionSeperatorHeight = 28.0f;
 
 @interface UITableViewCell (Accessor)
 
-@property(nonatomic,assign) UITableView *tableView;
-@property(nonatomic,strong) NSIndexPath *indexPath;
+@property(nonatomic,readonly) UITableView *tableView;
+@property(nonatomic,readonly) NSIndexPath *indexPath;
 
 @end
 
@@ -168,7 +168,9 @@ UIColor *UI7TableViewGroupedViewPatternColor = nil;
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     self = [self __initWithFrame:frame style:style];
     if (self) {
+        self.backgroundColor = [UI7Color whiteColor];
         if (style == UITableViewStyleGrouped) {
+            self.backgroundColor = [UI7Color groupTableViewBackgroundColor];
             [self _tableViewInitGrouped];
         }
         [self _tableViewInit];
@@ -178,7 +180,7 @@ UIColor *UI7TableViewGroupedViewPatternColor = nil;
 
 - (void)awakeFromNib {
     if (self.__style == UITableViewStyleGrouped && self.superview == nil && [self.backgroundColor isEqual:[UIColor clearColor]]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UI7Color groupTableViewBackgroundColor];
     }
 }
 
@@ -375,8 +377,6 @@ UIView *_UI7TableViewDelegateViewForFooterInSection(id self, SEL _cmd, UITableVi
     [self __updateVisibleCellsNow:flag];
     for (NSIndexPath *path in self.indexPathsForVisibleRows) {
         UITableViewCell *cell = [self cellForRowAtIndexPath:path];
-        cell.tableView = self;
-        cell.indexPath = path;
         [cell _tintColorUpdated];
     }
 
