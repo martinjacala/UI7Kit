@@ -67,7 +67,7 @@ NSString *UI7BarButtonItemSystemNames[] = {
 - (void)_tintColorUpdated {
     UIFont *font = [UI7Font systemFontOfSize:17.0 attribute:UI7FontAttributeLight];
     UIColor *tintColor = self.tintColor;
-    if (tintColor == nil) return;
+    if (tintColor == nil) tintColor = [[UI7KitWorkaroundTintSingleton sharedObject] workaroundNavigationBarTintColor];
     /*  FIXME:
      *  Actually, iOS7 back button is not implemented in this way. There is new property about '<' mark.
      *  To implement this in right way, UINavigationBar -drawRect: should be rewritten entirely, in my guess.
@@ -78,16 +78,18 @@ NSString *UI7BarButtonItemSystemNames[] = {
     backImage = [backImage imageByFilledWithColor:tintColor.highligtedColor];
     [self setBackButtonBackgroundImage:backImage forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
     [self setTitleTextAttributes:@{
-             UITextAttributeFont:font,
-        UITextAttributeTextColor:tintColor,
- UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero]
-     }
+                                   UITextAttributeFont:font,
+                                   UITextAttributeTextColor:tintColor,
+                                   UITextAttributeTextShadowColor:[UIColor clearColor],
+                                   UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero]
+                                   }
                         forState:UIControlStateNormal];
     [self setTitleTextAttributes:@{
-             UITextAttributeFont:font,
-        UITextAttributeTextColor:tintColor.highligtedColor,
- UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero],
-     }
+                                   UITextAttributeFont:font,
+                                   UITextAttributeTextColor:tintColor.highligtedColor,
+                                   UITextAttributeTextShadowColor:[UIColor clearColor],
+                                   UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero],
+                                   }
                         forState:UIControlStateHighlighted];
     self.image = [self.image imageByFilledWithColor:tintColor];
 }

@@ -25,6 +25,7 @@
 @interface UI7KitWorkaroundTintSingleton : NSObject
 
 @property (nonatomic, retain) UIColor *workaroundTintColor;
+@property (nonatomic, retain) UIColor *workaroundNavigationBarTintColor;
 @property (nonatomic, assign) UIBarStyle workaroundBarStyle;
 
 + (UI7KitWorkaroundTintSingleton *)sharedObject;
