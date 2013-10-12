@@ -302,21 +302,21 @@ UIView *_UI7TableViewDelegateViewForFooterInSection(id self, SEL _cmd, UITableVi
 
 - (void)setDataSource:(id<UITableViewDataSource>)dataSource {
     [self __setDataSource:dataSource];
-    if (self.delegate) {
-        id delegate = self.delegate;
-        [self __setDelegate:nil];
-        self.delegate = delegate;
-    }
+//    if (self.delegate) {
+//        id delegate = self.delegate;
+//        [self __setDelegate:nil];
+//        self.delegate = delegate;
+//    }
 }
 
 - (void)setDelegate:(id<UITableViewDelegate>)delegate {
-    if (self.delegate) {
+//    if (self.delegate) {
 //        Class delegateClass = [(NSObject *)self.delegate class];
 //        if ([delegateClass methodImplementationForSelector:@selector(tableView:viewForHeaderInSection:)] == (IMP)UI7TableViewDelegateViewForHeaderInSection) {
 //            // TODO: probably we should remove this methods.
 //            //            class_removeMethods(￼, ￼)
 //        }
-    }
+//    }
     if (delegate) {
         Class delegateClass = [(NSObject *)delegate class];
         if ([self.dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
