@@ -53,16 +53,26 @@
 - (void)__setAccessoryView:(UIView *)accessoryView { assert(NO); }
 - (void)__setBackgroundColor:(UIColor *)backgroundColor { assert(NO); }
 - (void)__setTableViewStyle:(int)style { assert(NO); }
+- (void)__setTableBackgroundCGColor:(CGColorRef)color withSystemColorName:(id)name  { assert(NO); }
 
 - (void)_tableViewCellInit {
     self.textLabel.highlightedTextColor = self.textLabel.textColor;
     self.detailTextLabel.highlightedTextColor = self.detailTextLabel.textColor; // FIXME: not sure
-    self.backgroundView = [[[UIView alloc] init] autorelease];
-    self.selectedBackgroundView = [[[UIView alloc] init] autorelease];
-    self.selectedBackgroundView.backgroundColor = [UIColor colorWith8bitWhite:217 alpha:255];
+    if (![NSStringFromClass([self class]) hasPrefix:@"AB"] && ![[self reuseIdentifier] hasPrefix:@"AB"]) {
+        self.backgroundView = [[[UIView alloc] init] autorelease];
+    }
+    
+    [self.backgroundView setBackgroundColor:[UIColor clearColor]];
+    if (![NSStringFromClass([self class]) hasPrefix:@"AB"] && ![[self reuseIdentifier] hasPrefix:@"AB"]) {
+        self.selectedBackgroundView = [[[UIView alloc] init] autorelease];
+        self.selectedBackgroundView.backgroundColor = [UIColor colorWith8bitWhite:217 alpha:255];
+    }
     self.textLabel.backgroundColor = [UIColor clearColor];
     self.detailTextLabel.backgroundColor = [UIColor clearColor];
-    self.backgroundColor = [UIColor whiteColor];
+    
+    if (![NSStringFromClass([self class]) hasPrefix:@"AB"] && ![[self reuseIdentifier] hasPrefix:@"AB"]) {
+        self.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 - (void)_accessoryButtonTapped:(id)sender {
@@ -150,7 +160,8 @@ UIImage *UI7TableViewCellAccessoryCheckmarkImageCreate() {
         [target copyToSelector:@selector(__setAccessoryView:) fromSelector:@selector(setAccessoryView:)];
         [target copyToSelector:@selector(__setBackgroundColor:) fromSelector:@selector(setBackgroundColor:)];
         [target copyToSelector:@selector(__setTableViewStyle:) fromSelector:@selector(setTableViewStyle:)];
-
+        [target copyToSelector:@selector(__setTableBackgroundCGColor:withSystemColorName:) fromSelector:@selector(_setTableBackgroundCGColor:withSystemColorName:)];
+        
         UI7TableViewCellAccessoryDisclosureIndicatorImage = [UI7TableViewCellAccessoryDisclosureIndicatorImageCreate() retain];
         UI7TableViewCellAccessoryCheckmarkImage = [UI7TableViewCellAccessoryCheckmarkImageCreate() retain];
     }
@@ -229,7 +240,9 @@ UIImage *UI7TableViewCellAccessoryCheckmarkImageCreate() {
 }
 
 - (void)_setTableBackgroundCGColor:(CGColorRef)color withSystemColorName:(id)name {
-    // NOTE: Do nothing here!
+    if ([NSStringFromClass([self class]) hasPrefix:@"AB"]) {
+        [self __setTableBackgroundCGColor:color withSystemColorName:name];
+    }
 }
 
 - (void)setAccessoryView:(UIView *)accessoryView {
