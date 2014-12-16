@@ -155,6 +155,16 @@ NSAPropertyAssignSetter(setNavigationBar, @"_navigationBar");
         default:
             break;
     }
+    
+    BOOL isAB = NO;
+    if ([self respondsToSelector:@selector(findABRelatedControllers:)]) {
+        isAB = [self findABRelatedControllers:[[UIApplication sharedApplication] keyWindow]];
+    }
+    
+    if (isAB) {
+        titleColor = [[UI7KitWorkaroundTintSingleton sharedObject] workaroundABTitleBarColor];
+    }
+    
     if (titleColor) {
         NSDictionary *dict = @{
                                UITextAttributeFont: [UI7Font systemFontOfSize:17.0 attribute:UI7FontAttributeMedium],
@@ -172,7 +182,24 @@ NSAPropertyAssignSetter(setNavigationBar, @"_navigationBar");
     if (backgroundColor) {
         self.backgroundColor = backgroundColor;
     }
+    
+    if (isAB) {
+        self.backgroundColor = [[UI7KitWorkaroundTintSingleton sharedObject] workaroundABBarColor];
+    }
 }
+
+- (BOOL)findABRelatedControllers:(UIView *)aView
+{
+    for (UIView *v in [aView subviews]) {
+        if ([NSStringFromClass([v class]) hasPrefix:@"AB"]) {
+            return YES;
+        } else {
+            return [self findABRelatedControllers:v];
+        }
+    }
+    return NO;
+}
+
 
 //- (void)setItems:(NSArray *)items animated:(BOOL)animated {
 //    [super setItems:items animated:animated];

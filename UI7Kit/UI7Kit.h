@@ -13,7 +13,7 @@
 
 
 #ifdef COCOAPODS
-#include "../Pods-environment.h"
+#include "../../Target Support Files/Pods/Pods-environment.h"
 #else // no cocoapods, so enable everything
 
 #define COCOAPODS_POD_AVAILABLE_FoundationExtension
